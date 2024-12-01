@@ -44,7 +44,7 @@ using DotNetBath14MTZO.ConsoleApp.EfCoreExamples;
 //    Console.WriteLine(dr["BlogContent"]);
 //}
 
-AdoDotNetExample adoDotNetExample = new AdoDotNetExample();
+//AdoDotNetExample adoDotNetExample = new AdoDotNetExample();
 //adoDotNetExample.Read();
 
 //adoDotNetExample.Edit("D42789B4-29CA-4B21-A0D5-6B77822C4108");
@@ -55,7 +55,7 @@ AdoDotNetExample adoDotNetExample = new AdoDotNetExample();
 
 
 //Dapper
-DapperExample dapperExample = new DapperExample();
+//DapperExample dapperExample = new DapperExample();
 //dapperExample.Read();
 //dapperExample.Edit("DA6D1F70-14AC-474A-8E7C-C0D42CAD7290");
 //dapperExample.Edit("");
@@ -66,12 +66,12 @@ DapperExample dapperExample = new DapperExample();
 //FECore
 
 EfCoreExample efCoreExample = new EfCoreExample();
-//efCoreExample.Read();
-//efCoreExample.Edit("D42789B4-29CA-4B21-A0D5-6B77822C4108");
-//efCoreExample.Edit(" ");
-//efCoreExample.Create("Blog Title 9", "Blog Author 9", "Blog Content 9");
-//efCoreExample.Update("259cbeda-15e1-45bb-909c-537aa0ee9921", "Blog Title", "Blog Author", "Blog Content
-efCoreExample.Delete("259cbeda-15e1-45bb-909c-537aa0ee9921");
+efCoreExample.Read();
+efCoreExample.Edit("D42789B4-29CA-4B21-A0D5-6B77822C4108");
+efCoreExample.Edit(" ");
+efCoreExample.Create("Blog Title 9", "Blog Author 9", "Blog Content 9");
+efCoreExample.Update("6b5a4e78-5675-4d99-9de4-c4a13291c0df", "Blog Title", "Blog Author", "Blog Content");
+efCoreExample.Delete("6b5a4e78-5675-4d99-9de4-c4a13291c0df");
 Console.WriteLine("Connection Close");
 
 
