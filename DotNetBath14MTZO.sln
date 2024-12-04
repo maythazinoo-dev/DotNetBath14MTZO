@@ -5,7 +5,9 @@ VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetBath14MTZO.ConsoleApp", "DotNetBath14MTZO.ConsoleApp\DotNetBath14MTZO.ConsoleApp.csproj", "{234C7683-38D7-4414-99A7-713D678E8C22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetBath14MTZO.RestApi", "DotNetBath14MTZO.RestApi\DotNetBath14MTZO.RestApi.csproj", "{A11E975E-00CA-4C6F-A1EA-AB1E399B27D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetBath14MTZO.RestApi", "DotNetBath14MTZO.RestApi\DotNetBath14MTZO.RestApi.csproj", "{A11E975E-00CA-4C6F-A1EA-AB1E399B27D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetBath14MTZO.Practice.ConsoleApp", "DotNetBath14MTZO.Practice.ConsoleApp\DotNetBath14MTZO.Practice.ConsoleApp.csproj", "{F5C6FC3D-341C-4161-8C68-946A3F363B4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{A11E975E-00CA-4C6F-A1EA-AB1E399B27D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A11E975E-00CA-4C6F-A1EA-AB1E399B27D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A11E975E-00CA-4C6F-A1EA-AB1E399B27D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5C6FC3D-341C-4161-8C68-946A3F363B4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5C6FC3D-341C-4161-8C68-946A3F363B4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5C6FC3D-341C-4161-8C68-946A3F363B4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5C6FC3D-341C-4161-8C68-946A3F363B4F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
