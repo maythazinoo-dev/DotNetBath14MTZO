@@ -109,7 +109,7 @@ namespace DotNetBath14MTZO.Practice.ConsoleApp.AdoDotNetPractices
       ,[BlogAuthor] = '{author}'
       ,[BlogContent] ='{content}'
  WHERE BlogId = '{id}'";
-            SqlCommand cmd = new SqlCommand(query, sqlConnection);
+            SqlCommand cmd = new SqlCommand(query,sqlConnection);
             SqlDataAdapter adapter = new SqlDataAdapter();
             int result = cmd.ExecuteNonQuery();
 
@@ -124,14 +124,14 @@ namespace DotNetBath14MTZO.Practice.ConsoleApp.AdoDotNetPractices
             SqlConnection sqlConnection = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
             sqlConnection.Open();
             string query = $@"delete from Tbl_Blog where BlogId = '{id}'";
-            SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+            SqlCommand sqlCommand = new SqlCommand(query,sqlConnection);
             SqlDataAdapter adapter = new SqlDataAdapter();
             int result = sqlCommand.ExecuteNonQuery();
             sqlConnection.Close();
             string message = result > 0 ? "Delete Successful" : "Delete Failed";
             Console.WriteLine(message);
         }
+
     }
-    
 }
 
