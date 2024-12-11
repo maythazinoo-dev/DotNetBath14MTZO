@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace DotNetBath14MTZO.RestApi.Controllers.WeatherForecast.WeatherForecast
+namespace DotNetBath14MTZO.RestApi.Features.WeatherForecast
 {
     [ApiController]
     [Route("[controller]")]
@@ -19,9 +19,9 @@ namespace DotNetBath14MTZO.RestApi.Controllers.WeatherForecast.WeatherForecast
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecastModel> Get()
+        public IEnumerable<WeatherForecastService> Get()
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecastModel
+            return Enumerable.Range(1, 5).Select(index => new WeatherForecastService
             {
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
                 TemperatureC = Random.Shared.Next(-20, 55),

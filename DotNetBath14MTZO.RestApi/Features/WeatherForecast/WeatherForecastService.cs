@@ -1,6 +1,6 @@
-namespace DotNetBath14MTZO.RestApi.Controllers.WeatherForecast
+namespace DotNetBath14MTZO.RestApi.Features.WeatherForecast
 {
-    public class WeatherForecastModel
+    public class WeatherForecastService
     {
         public DateOnly Date { get; set; }
 

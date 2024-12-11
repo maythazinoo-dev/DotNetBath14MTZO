@@ -1,22 +1,21 @@
-﻿
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace DotNetBath14MTZO.RestApi.Features.Blog
 {
+    [Table("{Tbl_Blog}")]
     public class BlogModel
     {
-        public string? BlogId    { get; set; }
+        [Key]
+        public string? BlogId { get; set; }  
         public string? BlogTitle { get; set; }
         public string? BlogAuthor { get; set; }
         public string? BlogContent { get; set; }
-
-        internal static void UseDeveloperExceptionPage()
-        {
-            throw new NotImplementedException();
-        }
     }
     public class BlogResponseModel
     {
-        public bool IsSuccess { get; set; }
-        public string Message { get; set; }
+        public bool IsSuccess {get; set;}
+        public string Message {get ; set;}
     }
 
 }
