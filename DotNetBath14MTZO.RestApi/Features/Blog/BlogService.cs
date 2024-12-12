@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Server.HttpSys;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Primitives;
 using System.Data;
 
 namespace DotNetBath14MTZO.RestApi.Features.Blog
@@ -144,24 +145,46 @@ namespace DotNetBath14MTZO.RestApi.Features.Blog
                     Message = "No found Data"
                 };
             }
-            if (string.IsNullOrEmpty(requestModel.BlogTitle))
+            //if (string.IsNullOrEmpty(requestModel.BlogTitle))
+            //{
+            //    requestModel.BlogTitle = item.BlogTitle;
+            //}
+            //if (string.IsNullOrEmpty(requestModel.BlogAuthor))
+            //{
+            //    requestModel.BlogAuthor = item.BlogAuthor;
+            //}
+            //if (string.IsNullOrEmpty(requestModel.BlogContent))
+            //{
+            //    requestModel.BlogContent = item.BlogContent;
+            //}
+
+            string conditions = string.Empty;
+               // if (requestModel.BlogTitle != null)
+               //if (requestModel.BlogTitle is not null )
+             if (!string.IsNullOrEmpty(requestModel.BlogTitle))
             {
-                requestModel.BlogTitle = item.BlogTitle;
+                conditions = " [BlogTitle] = @BlogTitle, ";
+            } 
+
+            if (!string.IsNullOrEmpty(requestModel.BlogAuthor))
+            {
+                conditions = " [BlogAuthor] = @BlogAuthor, ";
             }
-            if (string.IsNullOrEmpty(requestModel.BlogAuthor))
+            
+            if (!string.IsNullOrEmpty(requestModel.BlogContent))
             {
-                requestModel.BlogAuthor = item.BlogAuthor;
+                conditions = " [BlogContent] = @BlogContent, ";
             }
-            if (string.IsNullOrEmpty(requestModel.BlogContent))
+            if(conditions.Length == 0)
             {
-                requestModel.BlogContent = item.BlogContent;
+                throw new Exception("Invalid Parameters.");
             }
 
-            string query = $@"UPDATE [dbo].[Tbl_Blog]
+            conditions= conditions.Substring(0, conditions.Length - 2);
+            string query = @"UPDATE [dbo].[Tbl_Blog]
 
-          SET [BlogTitle] = @BlogTitle
-              ,[BlogAuthor] = @BlogAuthor
-             ,[BlogContent] = @BlogContent
+          SET {conditions}
+             
         WHERE [BlogId] = @BlogId";
 
             SqlConnection connection = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
