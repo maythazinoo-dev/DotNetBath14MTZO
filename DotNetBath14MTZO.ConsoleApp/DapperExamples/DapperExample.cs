@@ -91,7 +91,7 @@ namespace DotNetBath14MTZO.ConsoleApp.DapperExamples
             using IDbConnection connection = new SqlConnection(_connectionString);
             string query = $"DELETE FROM [dbo].[Tbl_Blog] WHERE [BlogId]='{id}'";
             int result = connection.Execute(query);
-            string message = result > 0 ? "Delet Complete" : "Delete Failed";
+            string message = result > 0 ? "Delete Successful" : "Delete Failed";
             Console.WriteLine(message);
         }
 
