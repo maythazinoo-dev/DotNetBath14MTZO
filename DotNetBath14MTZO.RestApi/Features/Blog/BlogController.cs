@@ -7,10 +7,12 @@ namespace DotNetBath14MTZO.RestApi.Features.Blog
     [ApiController]
     public class BlogController : ControllerBase
     {
-        private readonly BlogService _blogService;
+        private readonly IBlogService _blogService;
         public BlogController()
         {
-            _blogService = new BlogService();
+            //_blogService = new BlogService();
+            //_blogService = new BlogDapperService();
+            _blogService = new BlogEfCoreService();
         }
 
         [HttpGet]
@@ -59,7 +61,7 @@ namespace DotNetBath14MTZO.RestApi.Features.Blog
         public IActionResult UpdateBlog(string id, BlogModel requestModel)
         {
             requestModel.BlogId = id;
-            var model = _blogService.UpdatetBlog(requestModel);
+            var model = _blogService.UpdateBlog(requestModel);
             if (!model.IsSuccess)
             {
                 return BadRequest(model);

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DotNetBath14MTZO.RestApi.Features.Blog
 {
-    [Table("{Tbl_Blog}")]
+    [Table("Tbl_Blog")]
     public class BlogModel
     {
         [Key]

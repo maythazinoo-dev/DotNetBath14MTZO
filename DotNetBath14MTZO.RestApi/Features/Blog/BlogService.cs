@@ -6,16 +6,16 @@ using System.Data;
 
 namespace DotNetBath14MTZO.RestApi.Features.Blog
 {
-    public class BlogService
+    public class BlogService: IBlogService
     {
-        private readonly SqlConnectionStringBuilder _sqlConnectionStringBuilder = new SqlConnectionStringBuilder() 
-        { 
+        private readonly SqlConnectionStringBuilder _sqlConnectionStringBuilder = new SqlConnectionStringBuilder()
+        {
             DataSource = ".",
-            InitialCatalog="WalletDB",
-            UserID ="sa",
-            Password="mtzoo@123",
+            InitialCatalog = "WalletDB",
+            UserID = "sa",
+            Password = "mtzoo@123",
             TrustServerCertificate = true
-        };  
+        };
 
         public List<BlogModel> GetBlogs()
         {
@@ -24,7 +24,7 @@ namespace DotNetBath14MTZO.RestApi.Features.Blog
       ,[BlogAuthor]
       ,[BlogContent]
        FROM [dbo].[Tbl_Blog]";
-            SqlConnection connection= new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
+            SqlConnection connection = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
             connection.Open();
             SqlCommand cmd = new SqlCommand(query, connection);
             SqlDataAdapter adapter = new SqlDataAdapter(cmd);
@@ -33,8 +33,8 @@ namespace DotNetBath14MTZO.RestApi.Features.Blog
             connection.Close();
 
             List<BlogModel> lst = new List<BlogModel>();
-            foreach (DataRow dr in dt.Rows) 
-            { 
+            foreach (DataRow dr in dt.Rows)
+            {
                 BlogModel item = new BlogModel();
                 item.BlogId = dr["BlogId"].ToString()!;
                 item.BlogTitle = dr["BlogTitle"].ToString()!;
@@ -48,7 +48,7 @@ namespace DotNetBath14MTZO.RestApi.Features.Blog
         public BlogModel GetBlog(string id)
         {
             string query = "select * from Tbl_Blog where BlogId = @BlogId";
-            SqlConnection connection = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString); 
+            SqlConnection connection = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
             connection.Open();
             SqlCommand cmd = new SqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@BlogId", id);
@@ -68,10 +68,10 @@ namespace DotNetBath14MTZO.RestApi.Features.Blog
             model.BlogAuthor = row["BlogAuthor"].ToString()!;
             model.BlogContent = row["BlogContent"].ToString()!;
             return model;
-            
+
         }
 
-        public BlogResponseModel CreateBlog([FromBody]BlogModel requestModel)
+        public BlogResponseModel CreateBlog([FromBody] BlogModel requestModel)
         {
             string query = @"INSERT INTO [dbo].[Tbl_Blog]
            ([BlogTitle]
@@ -81,29 +81,29 @@ namespace DotNetBath14MTZO.RestApi.Features.Blog
            (@BlogTitle
            ,@BlogAuthor
            ,@BlogContent)";
-            SqlConnection connection = new SqlConnection( _sqlConnectionStringBuilder.ConnectionString);    
+            SqlConnection connection = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
             connection.Open();
             SqlCommand cmd = new SqlCommand(query, connection);
-            cmd.Parameters.AddWithValue("@BlogTitle",requestModel.BlogTitle);
-            cmd.Parameters.AddWithValue("@BlogAuthor",requestModel.BlogAuthor);
-            cmd.Parameters.AddWithValue("@BlogContent",requestModel.BlogContent);
+            cmd.Parameters.AddWithValue("@BlogTitle", requestModel.BlogTitle);
+            cmd.Parameters.AddWithValue("@BlogAuthor", requestModel.BlogAuthor);
+            cmd.Parameters.AddWithValue("@BlogContent", requestModel.BlogContent);
             int result = cmd.ExecuteNonQuery();
             connection.Close();
 
             string message = result > 0 ? "Saving Successful" : "Saving Failed";
-            BlogResponseModel model = new BlogResponseModel(); 
+            BlogResponseModel model = new BlogResponseModel();
             model.IsSuccess = result > 0;
             model.Message = message;
             return model;
         }
 
-    
+
 
         public BlogResponseModel UpsertBlog(BlogModel requestModel)
         {
             BlogResponseModel model = new BlogResponseModel();
             var item = GetBlog(requestModel.BlogId!);
-            if(item is not null)
+            if (item is not null)
             {
                 string query = @"UPDATE [dbo].[Tbl_Blog]
    SET [BlogTitle] = @BlogTitle
@@ -121,19 +121,19 @@ namespace DotNetBath14MTZO.RestApi.Features.Blog
                 connection.Close();
 
                 string message = result > 0 ? "Updating Successful" : "Updating Failed";
-                model.IsSuccess= result > 0;
-                model.Message =  message;
-               
+                model.IsSuccess = result > 0;
+                model.Message = message;
+
 
             }
-            else if(item is null)
+            else if (item is null)
             {
                 model = CreateBlog(requestModel);
             }
             return model;
         }
 
-        public BlogResponseModel UpdatetBlog(BlogModel requestModel)
+        public BlogResponseModel UpdateBlog(BlogModel requestModel)
         {
             var item = GetBlog(requestModel.BlogId!);
             if (item is null)
@@ -185,12 +185,13 @@ namespace DotNetBath14MTZO.RestApi.Features.Blog
         public BlogResponseModel DeleteBlog(string id)
         {
             string query = "delete from Tbl_Blog where [BlogId]= @BlogId";
-            SqlConnection connection = new SqlConnection( _sqlConnectionStringBuilder.ConnectionString);
+            SqlConnection connection = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
             connection.Open();
             SqlCommand command = new SqlCommand(query, connection);
             command.Parameters.AddWithValue("@BlogId", id);
             int result = command.ExecuteNonQuery();
             connection.Close();
+
             string message = result > 0 ? "Delete Successful" : "Delete Failed";
             BlogResponseModel model = new BlogResponseModel();
             model.IsSuccess = result > 0;
