@@ -66,7 +66,7 @@ namespace DotNetBath14MTZO.ConsoleApp4
         public async Task<BlogResponseModel> DeleteBlog(string id)
         {
             //HttpClient client = new HttpClient();
-            HttpResponseMessage response = await _client.GetAsync($"{endpoint}/{id}");
+            HttpResponseMessage response = await _client.DeleteAsync($"{endpoint}/{id}");
             
                 string json = await response.Content.ReadAsStringAsync();
                 Console.WriteLine(json);
