@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DotNetBath14MTZO.SnakesAndLadderGame.Features
+namespace DotNetBath14MTZO.SnakeGame.Features
 {
     public class AppDbContext : DbContext
     {
@@ -26,13 +26,13 @@ namespace DotNetBath14MTZO.SnakesAndLadderGame.Features
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer(_sqlConnectionStringBuilder.ConnectionString);
-                
+
             }
 
         }
 
 
-        public DbSet<PlayerModel> gamePlayer { get; set; }
+        public DbSet<PlayerModel> player { get; set; }
         public DbSet<BoardModel> gameBoard { get; set; }
         public DbSet<GameMoveModel> gameMove { get; set; }
         public DbSet<GameModel> game { get; set; }

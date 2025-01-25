@@ -13,29 +13,29 @@ namespace DotNetBath14MTZO.BurmaProject.PhayarSar
         private readonly IphayarSarApi _api;
         public PhayarSarRefitService()
         {
-            _api = RestService.For<IphayarSarApi>("https://burma-project-ideas.vercel.app/");
+            _api = RestService.For<IphayarSarApi>("https://raw.githubusercontent.com/");
         }
 
-        public async Task<List<PhayarSarModel>> GetPhayarSars()
+        public async Task<List<PhayarSarTitle>> GetPhayarSars()
         {
             var phayarSar = await _api.GetPhayarSars();
             return phayarSar;
         }
 
-        public async Task<PhayarSarModel> GetPhayarSar(int groupId, int detailId)
+        public async Task<PhayarSarDetail> GetPhayarSar(int groupId, int detailId)
         {
-            var phayarSar = await _api.GetPhayarSar(groupId,detailId);
+            var phayarSar = await _api.GetPhayarSar(groupId, detailId);
             return phayarSar;
         }
     }
 
     public interface IphayarSarApi
     {
-        [Get("/PhayarSar")]
-        Task<List<PhayarSarModel>> GetPhayarSars();
+        [Get("/burma-project-ideas/phayar-sar/refs/heads/main/data/data.json")]
+        Task<List<PhayarSarTitle>> GetPhayarSars();
 
-        [Get("/PhayarSar/{id}")]
-        Task<PhayarSarModel> GetPhayarSar(int groupId, int detailId);
+        [Get("/burma-project-ideas/phayar-sar/refs/heads/main/data/{groupId}/{detailId}.json")]
+        Task<PhayarSarDetail> GetPhayarSar(int groupId, int detailId);
 
 
     }

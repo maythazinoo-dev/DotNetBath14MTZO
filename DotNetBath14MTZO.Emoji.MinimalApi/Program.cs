@@ -19,8 +19,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-EmojiEFCoreService emojiEFCoreService= new EmojiEFCoreService();
-await emojiEFCoreService.SavingDataAsync();
+EmojiEFCoreService emojiEFCoreService = new EmojiEFCoreService();
+//await emojiEFCoreService.SavingDataAsync();
 
 
 app.MapGet("/api/Emojis", async() =>
@@ -29,22 +29,25 @@ app.MapGet("/api/Emojis", async() =>
         var list = await emojiEFCoreService.GetEmojiAsync();
         return Results.Ok(list);
   
-   
 })
  .WithName("GetAllEmojis")
  .WithOpenApi();
 
 
-app.MapGet("/api/Emoji/{id}", (int id) =>
+app.MapGet("/api/Emoji/{id}", async (int id) =>
 {
-    var item = emojiEFCoreService.GetEmojiByIdAsync(id);
+    var item = await emojiEFCoreService.GetEmojiByIdAsync(id);
+    if (!item.IsSuccess)
+    {
+        return Results.NotFound("Data not found");
+    }
     return Results.Ok(item);
 })
  .WithName("GetByIdEmojis")
  .WithOpenApi();
 
 
-app.MapGet("/api/Emoji/FilterByName",async(string name) =>
+app.MapGet("/api/Emoji/FilterByName",async (string name) =>
 {
     var item =await emojiEFCoreService.FilterByName(name);
     return Results.Ok(item);

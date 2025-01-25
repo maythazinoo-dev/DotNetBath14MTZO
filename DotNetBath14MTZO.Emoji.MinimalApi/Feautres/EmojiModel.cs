@@ -25,11 +25,7 @@ namespace DotNetBath14MTZO.Emoji.MinimalApi.Feautres
         public string Message { get; set; }
         public EmojiModel Data { get; set; }
     }
-    public class EmojiRequestModel
-    {
-        public List<EmojiModel> Emojis { get; set; }
-    }
-
+    
     public class EmojiListResponseModel
     {
         public bool IsSuccess { get; set; }
@@ -37,6 +33,10 @@ namespace DotNetBath14MTZO.Emoji.MinimalApi.Feautres
         public List<EmojiModel> Data { get; set; }
     }
 
-   
+    public class EmojiRequestModel
+    {
+        public List<EmojiModel> Emojis { get; set; }
+    }
+
 }
 

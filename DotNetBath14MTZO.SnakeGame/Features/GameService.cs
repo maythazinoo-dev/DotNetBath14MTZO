@@ -1,215 +1,175 @@
-﻿using DotNetBath14MTZO.SnakesAndLadderGame.Features;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
-using System.Diagnostics.Eventing.Reader;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace DotNetBath14MTZO.SnakeGame.Features
 {
     public class GameService
     {
-        private readonly AppDbContext _appDbContext;
+        private readonly AppDbContext _db;
+
+        private readonly Random _random;
+
         public GameService()
         {
-            _appDbContext = new AppDbContext();
-
-
-
+            _db = new AppDbContext();
+            _random = new Random();
         }
-        public BoardResponseModel CreateBoard(BoardModel requestBoardModel)
+
+        public List<GameModel> GetGames()
         {
-            _appDbContext.gameBoard.Add(requestBoardModel);
-            int result = _appDbContext.SaveChanges();
-            string message = result > 0 ? "Game Board Create Successful" : "Game Board Create Failed";
-            return new BoardResponseModel
+            return _db.game
+                .AsNoTracking()
+                .ToList();
+        }
+        public ResponseModel CreateGameBoard(BoardModel gameBoard)
+        {
+            _db.gameBoard.Add(gameBoard);
+            var result = _db.SaveChanges();
+            string message = result > 0 ? "Game board created successfully." : "Failed to create game board.";
+            return new ResponseModel
             {
-                IsSuccess = result > 0,
+                IsSuccessful = result > 0,
                 Message = message
             };
         }
-
-        public GameResponseModel CreateGame(List<PlayerModel> PlayerArray)
+        public ResponseModel CreateGame(List<PlayerModel> playersArray)
         {
-            if (PlayerArray.Count == 0)
+            int firstPlayerID = 0;
+
+            for (int i = 0; i < playersArray.Count; i++)
             {
-                return new GameResponseModel
+                var player = playersArray[i];
+                _db.player.Add(player);
+                _db.SaveChanges();
+
+                if (i == 0)
                 {
-                    IsSuccess = false,
-                    Message = "No Player for the game"
-                };
-
+                    firstPlayerID = player.PlayerID;
+                }
             }
-            foreach (var player in PlayerArray)
-            {
-                player.PlayerCurrentPosition = 1;
 
-            }
-            _appDbContext.gamePlayer.AddRange(PlayerArray);
-            _appDbContext.SaveChanges();
-
-
-            int firstPlayerId = (int)PlayerArray.First().PlayerId!;
             var game = new GameModel
             {
                 GameStatus = "InProgress",
-                CurrentPlayerId = firstPlayerId,
-                //GameMember = PlayerArray.Count()
+                CurrentPlayerID = firstPlayerID,
+                members = playersArray.Count
             };
-            _appDbContext.game.Add(game);
-            _appDbContext.SaveChanges();
+            _db.game.Add(game);
+            _db.SaveChanges();
 
-            for (int i = 0; i < PlayerArray.Count; i++)
+            foreach (var player in playersArray)
             {
                 var initialGameMove = new GameMoveModel
                 {
-                    GameId = game.GameId,
-                    PlayerId = (int)PlayerArray.First().PlayerId!,
-                    FromCell = 0,
-                    ToCell = 0,
+                    GameID = game.GameID,
+                    PlayerID = player.PlayerID,
+                    FromCell = 1,
+                    ToCell = 1,
                     MoveDate = DateTime.Now
                 };
-                _appDbContext.gameMove.Add(initialGameMove);
+                _db.gameMove.Add(initialGameMove);
             }
-            int result = _appDbContext.SaveChanges();
-            string message = result > 0 ? "Game Create Successful" : "Game Create Failed";
-            return new GameResponseModel
+
+            var result = _db.SaveChanges();
+
+            string message = result > 0 ? "Game created successfully." : "Game creation failed.";
+            return new ResponseModel
             {
-                IsSuccess = result > 0,
+                IsSuccessful = result > 0,
                 Message = message
             };
-
-
-            //foreach (var player in PlayerArray)
-            //{
-            //    player.PlayerCurrentPosition = 1;
-
-            //    var initialGameMove = new GameMoveModel
-            //    {
-            //        GameId = game.GameId,
-            //        PlayerId = (int)player.PlayerId !,
-            //        FromCell = 0,
-            //        ToCell = 0,
-            //        MoveDate = DateTime.Now
-            //    };
-            //    _appDbContext.gameMove.Add(initialGameMove);
-            //}
-
-            // _appDbContext.gamePlayer.AddRange(PlayerArray);
-            //int result = _appDbContext.SaveChanges();
-            // string message = result > 0 ? "Game Create Successful" : "Game Create Failed";
-            // return new GameResponseModel
-            // {
-            //     IsSuccess = result > 0,
-            //     Message = message
-            // };
-
-
         }
 
-        public GameResponseModel MoveGame(int gameId, int PlayerId)
+
+        public ResponseModel PlayGame(int id)
         {
-            var game = _appDbContext.game.AsNoTracking().FirstOrDefault(x => x.GameId == gameId);
-            var player = _appDbContext.gamePlayer.AsNoTracking().FirstOrDefault(x => x.PlayerId == PlayerId);
-            var gameboard = _appDbContext.gameBoard.ToList();
+            var game = _db.game.AsNoTracking().FirstOrDefault(g => g.CurrentPlayerID == id);
+            var player = _db.player.AsNoTracking().FirstOrDefault(p => p.PlayerID == id);
 
-            if (game is null || player is null)
+            if (game == null)
             {
-                return new GameResponseModel
+                return new ResponseModel
                 {
-                    IsSuccess = false,
-                    Message = "Game & Player not found "
+                    Message = "It is not your turn!"
                 };
             }
 
-            if (game.CurrentPlayerId != PlayerId)
-            {
-                return new GameResponseModel
-                {
-                    IsSuccess = false,
-                    Message = "This player is not turn"
-                };
+            int dice1 = _random.Next(1, 7);
+            int dice2 = _random.Next(1, 7);
+            int totalMove = dice1 + dice2;
 
-            }
-            Random random= new Random();
-            int diceRoll = random.Next(1, 7);
-            int newPosition = (int)player.PlayerCurrentPosition! + diceRoll;
-         
+            int fromcell = player.CurrentPosition;
+            int newPosition = fromcell + totalMove;
 
-            var moveGame = new GameMoveModel
+            var gameMove = new GameMoveModel
             {
-                GameId = gameId,
-                PlayerId = PlayerId,
-                FromCell = (int)player.PlayerCurrentPosition,
-                ToCell = newPosition,
+                GameID = game.GameID,
+                PlayerID = player.PlayerID,
+                FromCell = fromcell,
                 MoveDate = DateTime.Now
-
             };
-            
 
+            string message = $"{player.PlayerName} moved from {fromcell} to {newPosition}.";
+            var gameboard = _db.gameBoard.ToList();
             if (newPosition >= 100)
             {
+                message = $"{player.PlayerName} wins the game!";
                 game.GameStatus = "Completed";
-                
-                _appDbContext.Entry(game).State= EntityState.Modified;
-                _appDbContext.SaveChanges();
+                _db.Entry(game).State = EntityState.Modified;
+                _db.SaveChanges();
+            }
+            var allPlayers = _db.gameMove
+                .Where(gm => gm.GameID == game.GameID)
+                .Select(gm => gm.PlayerID)
+                .Distinct()
+                .OrderBy(id => id)
+                .ToList();
 
+            var currentIndex = allPlayers.FindIndex(p => p == player.PlayerID);
+            int nextIndex = (currentIndex < allPlayers.Count - 1) ? currentIndex + 1 : 0;
 
-            } 
-               
-                var allPlayers = _appDbContext.gamePlayer.ToList();
-                var currentIndex = allPlayers.FindIndex(p => p.PlayerId == PlayerId);
-                var nextIndex = (currentIndex + 1) % allPlayers.Count;
-                game.CurrentPlayerId = (int)allPlayers[nextIndex].PlayerId!;
-             
-                _appDbContext.Entry(game).State = EntityState.Modified;
-                _appDbContext.SaveChanges();
-
-                
-
-            foreach(var cell in gameboard)
+            game.CurrentPlayerID = allPlayers[nextIndex];
+            _db.Entry(game).State = EntityState.Modified;
+            _db.SaveChanges();
+            var nextplayer = _db.player.AsNoTracking().FirstOrDefault(p => p.PlayerID == game.CurrentPlayerID);
+            foreach (var cell in gameboard)
             {
-                if(cell.BoardCellNumber == newPosition)
+                if (cell.CellNumber == newPosition)
                 {
-                    if (cell.BoardCellType == "Normal")
+                    if (cell.CellType == "Normal")
                     {
-                        moveGame.ToCell = newPosition;
-                        player.PlayerCurrentPosition = newPosition;
-                       
+                        gameMove.ToCell = newPosition;
+                        player.CurrentPosition = newPosition;
+                        message = $"{player.PlayerName} moved from {fromcell} to {newPosition} and {nextplayer.PlayerName} turns.";
                     }
-
-                    else if (cell.BoardCellType == "SnakeHead"){
-                        moveGame.ToCell = newPosition;
-                        player.PlayerCurrentPosition = newPosition;
-
-                    }
-                    else if(cell.BoardCellType == "LadderBottom")
+                    else if (cell.CellType == "SnakeHead")
                     {
-                        moveGame.ToCell = newPosition;  
-                        player.PlayerCurrentPosition = newPosition;
+                        newPosition = cell.MoveToCell ?? 0;
+                        gameMove.ToCell = newPosition;
+                        player.CurrentPosition = newPosition;
+                        message = $"{player.PlayerName} landed on a snake head and moved from {fromcell + totalMove} to {newPosition} and {nextplayer.PlayerName} turns.";
+                    }
+                    else if (cell.CellType == "LadderBottom")
+                    {
+                        newPosition = cell.MoveToCell ?? 0;
+                        gameMove.ToCell = newPosition;
+                        player.CurrentPosition = newPosition;
+                        message = $"{player.PlayerName} climbed a ladder from {fromcell + totalMove} to {newPosition} and {nextplayer.PlayerName} turns.";
                     }
                     break;
-
-
                 }
-                player.PlayerCurrentPosition = newPosition;
-                _appDbContext.Entry(player).State= EntityState.Modified;
-                _appDbContext.SaveChanges();
-
-                _appDbContext.gameMove.Add(moveGame);
-                _appDbContext.SaveChanges();
-
-                return new GameResponseModel
-                {
-                    IsSuccess = true,
-                    Message =""
-                };
-
             }
+            player.CurrentPosition = newPosition;
+            _db.Entry(player).State = EntityState.Modified;
+            _db.SaveChanges();
+            _db.gameMove.Add(gameMove);
+            _db.SaveChanges();
 
-            
-
-
-
+            return new ResponseModel
+            {
+                IsSuccessful = true,
+                Message = message
+            };
         }
-    }
-    }
+        }
+}
 

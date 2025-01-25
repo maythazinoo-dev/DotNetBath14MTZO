@@ -6,28 +6,23 @@ using System.Threading.Tasks;
 
 namespace DotNetBath14MTZO.BurmaProject.PhayarSar
 {
-    public class PhayarSarModel
+    public class PhayarSarTitle
     {
         public int groupId { get; set; }
         public string title { get; set; }
-        
+        public List<PhayarSarDetail> Data { get; set; }
+
+    }
+
+    public class PhayarSarDetail
+    {
+        public int id { get; set; }
+        public int groupId { get; set; }
+        public string title { get; set; }
+        public string content { get; set; }
     }
 
 
-    //public class PhayarSarResponseModel
-    //{
-    //    public bool IsSuccess { get; set; }
-    //    public string Message { get; set; }
-    //    public PhayarSarModel phayarSarModel { get; set; }
-    //}
-
-    //public class BlogListResponseModel
-    //{
-    //    public bool IsSuccess { get; set; }
-    //    public string Message { get; set; }
-    //    public List<PhayarSarModel> phayarSarModel{ get; set; }
-    //}
 
 }
-
 

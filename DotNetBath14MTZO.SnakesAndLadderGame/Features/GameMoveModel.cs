@@ -16,7 +16,6 @@ namespace DotNetBath14MTZO.SnakesAndLadderGame.Features
 
     }
 
-  
 
     public class GameMoveResponseModel
     {
@@ -24,3 +23,5 @@ namespace DotNetBath14MTZO.SnakesAndLadderGame.Features
         public string Message { get; set; }
     }
 }
+
+

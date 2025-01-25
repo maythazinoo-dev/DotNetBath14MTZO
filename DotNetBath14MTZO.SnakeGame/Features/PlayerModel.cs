@@ -1,21 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace DotNetBath14MTZO.SnakesAndLadderGame.Features
+namespace DotNetBath14MTZO.SnakeGame.Features
 {
     [Table("Tbl_Players")]
     public class PlayerModel
     {
         [Key]
-        public int ? PlayerId { get; set; }
+        public int PlayerID { get; set; }
         public string? PlayerName { get; set; }
-        public int? PlayerCurrentPosition { get; set; }
+        public int CurrentPosition { get; set; }
     }
 
-    public class PlayerResponseModel 
-    {
-        public bool IsSuccess { get; set; }
-        public string Message { get; set; }
-    }
 
 }

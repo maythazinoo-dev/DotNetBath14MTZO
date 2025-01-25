@@ -14,6 +14,7 @@ namespace DotNetBath14MTZO.JsonPlaceholder
         public JsonPlaceholderRefitService() 
         {
             _Placeholder = RestService.For<IJsonPlaceHolderApi>("https://jsonplaceholder.typicode.com")!;
+           
         }
 
         public async Task<List<JsonModel>> GetPosts()

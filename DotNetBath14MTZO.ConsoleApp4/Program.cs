@@ -3,6 +3,7 @@ Console.WriteLine("Hello, World!");
 
 string endpoint = "https://localhost:7263/api/blog";
 HttpClient client = new HttpClient();
+
 HttpResponseMessage response = await client.GetAsync(endpoint);
 if (response.IsSuccessStatusCode)
 {
@@ -10,3 +11,5 @@ if (response.IsSuccessStatusCode)
     Console.WriteLine(content);
 }
 Console.ReadLine();
+
+

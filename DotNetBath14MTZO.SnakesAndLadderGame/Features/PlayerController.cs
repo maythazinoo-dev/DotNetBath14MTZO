@@ -63,7 +63,7 @@ namespace DotNetBath14MTZO.SnakesAndLadderGame.Features
         public IActionResult GetBoardModel(int id)
         {
             var item = _boardEfCoreService.GetBoardModel(id);
-            if(item is null)
+            if (item is null)
             {
                 return NotFound("No data found");
 
@@ -74,7 +74,7 @@ namespace DotNetBath14MTZO.SnakesAndLadderGame.Features
         [HttpPost("CreateGameBoard")]
         public IActionResult CreateBoard(BoardModel requestBoardModel)
         {
-            var model= _boardEfCoreService.CreateBoard(requestBoardModel);
+            var model = _boardEfCoreService.CreateBoard(requestBoardModel);
             if (!model.IsSuccess)
             {
                 return BadRequest(model);
@@ -84,8 +84,8 @@ namespace DotNetBath14MTZO.SnakesAndLadderGame.Features
         }
 
         [HttpPut("GameBoard/{id}")]
-        public IActionResult UpadteBoardModel(BoardModel requestBoardModel,int id)
-        { 
+        public IActionResult UpadteBoardModel(BoardModel requestBoardModel, int id)
+        {
             requestBoardModel.BoardId = id;
             var item = _boardEfCoreService.UpdateBoardModel(requestBoardModel);
             if (!item.IsSuccess)
@@ -96,7 +96,7 @@ namespace DotNetBath14MTZO.SnakesAndLadderGame.Features
         }
 
         [HttpDelete("GamaeBoard/{id}")]
-        public IActionResult DeleteBoard(int id) 
+        public IActionResult DeleteBoard(int id)
         {
             var item = _boardEfCoreService.DeleteBoardModel(id);
             if (!item.IsSuccess)
@@ -106,16 +106,16 @@ namespace DotNetBath14MTZO.SnakesAndLadderGame.Features
             return Ok(item);
         }
 
-        [HttpPost("PlayGame")]
-        public IActionResult CreateGame (GameModel requestGameModel)
-        {
-            var game = _gameMovieEfCoreService.CreateGame(requestGameModel);
-            if (!game.IsSuccess)
-            { 
-                return BadRequest(game);
-            }
-            return Ok(game);
-        }
+        //[HttpPost("PlayGame")]
+        //public IActionResult CreateGame (GameModel requestGameModel)
+        //{
+        //    var game = _gameMovieEfCoreService.CreateGame(requestGameModel);
+        //    if (!game.IsSuccess)
+        //    { 
+        //        return BadRequest(game);
+        //    }
+        //    return Ok(game);
+        //}
 
         [HttpGet("Game")]
         public IActionResult GetGames()
@@ -130,7 +130,7 @@ namespace DotNetBath14MTZO.SnakesAndLadderGame.Features
             var game = _gameEfCoreService.GetGameById(id);
             if(game is null)
             {
-                return NotFound("Game not gound");
+                return NotFound("Game not found");
             }
             return Ok(game);
         }

@@ -26,6 +26,7 @@ namespace DotNetBath14MTZO.SnakesAndLadderGame.Features
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer(_sqlConnectionStringBuilder.ConnectionString);
+                
             }
 
         }

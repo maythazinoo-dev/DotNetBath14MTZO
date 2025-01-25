@@ -1,27 +1,25 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DotNetBath14MTZO.SnakesAndLadderGame.Features
+namespace DotNetBath14MTZO.SnakeGame.Features
 {
     [Table("Tbl_GameMoves")]
     public class GameMoveModel
     {
         [Key]
-        public int MoveId { get; set; }
-        public int GameId { get; set; }
-        public int PlayerId { get; set;}
-        public int FromCell {  get; set; }  
+        public int MoveID { get; set; }
+        public int GameID { get; set; }
+        [ForeignKey("GameID")]
+        public GameModel? Game { get; set; }
+        public int PlayerID { get; set; }
+        [ForeignKey("PlayerID")]
+        public PlayerModel? Player { get; set; }
+        public int FromCell { get; set; }
         public int ToCell { get; set; }
-        public DateTime MoveDate { get; set; }
+        public DateTime MoveDate { get; set; } = DateTime.Now;
 
     }
 
-
-    public class GameMoveResponseModel
-    {
-        public bool IsSuccess { get; set; }
-        public string Message { get; set; }
-    }
 }
 
 

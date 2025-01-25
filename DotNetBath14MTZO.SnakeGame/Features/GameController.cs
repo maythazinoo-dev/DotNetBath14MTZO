@@ -1,5 +1,4 @@
-﻿using DotNetBath14MTZO.SnakesAndLadderGame.Features;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DotNetBath14MTZO.SnakeGame.Features
@@ -9,35 +8,59 @@ namespace DotNetBath14MTZO.SnakeGame.Features
     public class GameController : ControllerBase
     {
         private readonly GameService _gameService;
-        public GameController() { 
+        public GameController()
+        {
             _gameService = new GameService();
         }
 
-        [HttpPost("GameBoard")]
-        public IActionResult CreateBoard(BoardModel requestBoardModel)
+        [HttpPost("CreateGameBoard")]
+        public IActionResult CreateGameBoard(BoardModel gameBoard)
         {
-            var board = _gameService.CreateBoard(requestBoardModel);
-            if (board is null) 
+            try
             {
-                return BadRequest(board);
+                var response = _gameService.CreateGameBoard(gameBoard);
+                if (!response.IsSuccessful) return BadRequest(response);
+                return Ok(response);
             }
-            return Ok(board);
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseModel
+                {
+                    Message = ex.ToString(),
+                });
+            }
         }
 
-
-        [HttpPost("CreateGame")]
+        [HttpPost]
         public IActionResult CreateGame(List<PlayerModel> playerlist)
         {
             try
             {
                 var response = _gameService.CreateGame(playerlist);
-
-                if (!response.IsSuccess) return BadRequest(response);
+                if (!response.IsSuccessful) return BadRequest(response);
                 return Ok(response);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new GameResponseModel
+                return StatusCode(500, new ResponseModel
+                {
+                    Message = ex.ToString(),
+                });
+            }
+        }
+
+        [HttpPost("{id}")]
+        public IActionResult PlayGame(int id)
+        {
+            try
+            {
+                var response = _gameService.PlayGame(id);
+                if (!response.IsSuccessful) return BadRequest(response);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseModel
                 {
                     Message = ex.ToString(),
                 });
